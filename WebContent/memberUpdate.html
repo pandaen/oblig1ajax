@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Mservices, updateMember</title>
+<style type="text/css">
+th,td {text-align: left}
+th,td {padding: 0 5px}
+table {border-collapse: collapse}
+form { margin-top: 1em}
+legend { color: red}
+</style>
+<script type="text/javascript" src="script/config.js"></script>
+<script type="text/javascript" src="script/ajax/ajax.js"></script>
+
+<script type="text/javascript">
+"use strict";
+
+{	
+  let tElm = null
+  
+  function load() {
+  	document.getElementById("updateMember").addEventListener("click",updateMember,false)
+  	tElm = document.forms[0].getElementsByTagName('table')[0]
+  }
+
+  function viewMessage(m) {
+    document.getElementById("answer").textContent=m
+  }
+
+  function updateMember(e) {
+    const memberId = tElm.rows[0].cells[1].getElementsByTagName('input')[0].value
+    let url = config.servicesPath + "/member"
+    const member = {
+      'firstname': tElm.rows[1].cells[1].getElementsByTagName('input')[0].value,
+      'lastname': tElm.rows[2].cells[1].getElementsByTagName('input')[0].value,
+      'address': tElm.rows[3].cells[1].getElementsByTagName('input')[0].value,
+      'phone': tElm.rows[4].cells[1].getElementsByTagName('input')[0].value
+    }
+    const ajax = new AJAXConnection(url)
+    ajax.onsuccess = viewMessage
+	ajax.put([memberId],member)
+  }
+  
+  window.addEventListener("DOMContentLoaded",load,true)
+}
+</script>
+</head>
+<body>
+<h1>put /member/{memberId}</h1>
+<form>
+<table>
+<tr><th>memberId:</th><td><input type="text" size="3" value="0" /></td></tr>
+<tr><th>firstname:</th><td><input type="text" /></td></tr>
+<tr><th>lastname:</th><td><input type="text" /></td></tr>
+<tr><th>address:</th><td><input type="text" /></td></tr>
+<tr><th>phone:</th><td><input type="text" /></td></tr>
+</table>
+<div><button type="button" id="updateMember">Update member</button></div>
+</form>
+
+<p>Result:</p>
+<div id="answer"></div>
+</body>
+
+</html>
