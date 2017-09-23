@@ -1,5 +1,5 @@
 "use strict";
 
 var config = {
-  servicesPath: '../Mservices/data'  
+  servicesPath: 'http://eple.hib.no/t/bki/Mservices/data'  
 };
