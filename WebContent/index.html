@@ -12,29 +12,19 @@
 
 <script type="text/javascript">
 "use strict";
-
-// Kick off	
-// Hei Krister!
-//Hei Koopa
-//hei tilbake
-// Changes by ada
-//fgfsgssr
-//etjeriwoerjow
-var ctrl = new MainController("view")
-document.addEventListener('DOMContentLoaded',ctrl.init.bind(ctrl),false)	
-	
+// Kick off
+var ctrl = new MainController();
+document.addEventListener('DOMContentLoaded',ctrl.init.bind(ctrl),false);
 </script>
 
 <body>
 <h1>Memberlist</h1>
-
-<table id = table1 cellspacing = "10">
-<tr><th>Firstname</th><th>Lastname</th><th>Address</th><th>Phone</th></tr>
-</table>
 <br>
-<div><button type="button" id="addMember">Add Member</button></div>
+<input type="button" id="addMemberBtn" value="Add member" onclick="ctrl.openMemberdialog()" />
 <br>
+<p>
 <div id="answer"></div>
+</p>
 
 
 

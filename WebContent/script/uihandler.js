@@ -1,130 +1,135 @@
 class UIHandler {
-	 constructor() {
-this.table = null;
-	        this._tableElement = document.createElement("table")
-	        this._tableElement.style.display = "none"
-	        const rowElement = this._tableElement.createTHead().insertRow(-1)
-	        rowElement.appendChild(document.createElement("th")).textContent = "Firstname"
-	        rowElement.appendChild(document.createElement("th")).textContent = "Lastname"
-	        rowElement.appendChild(document.createElement("th")).textContent = "Address"
-	        rowElement.appendChild(document.createElement("th")).textContent = "Phone"
-	        for (let i=0; i<2; ++i) {
-	            rowElement.appendChild(document.createElement("th"))
-	        }
-	        this._tbodyElement = document.createElement("tbody")
-	        this._tableElement.appendChild(this._tbodyElement)
-	    }
-	
-	
-	 
-	 
-	 createTable() {
-		 
-		 this.table = document.createElement("table");
-			var tableRekke = document.createElement("tr");
+    constructor() {this.table = null;}
 
-			var nyCelle0 = document.createElement("th");
-			var nyCelle1 = document.createElement("th");
-			var nyCelle2 = document.createElement("th");
-			var nyCelle3 = document.createElement("th");
+    initTable () {
+        this.table = document.createElement("table");
 
-			tableRow.appendChild(nyCelle0);
-			tableRow.appendChild(nyCelle1);
-			tableRow.appendChild(nyCelle2);
-			tableRow.appendChild(nyCelle3);
+        let tableRow = document.createElement("tr");
 
-			var fornavn = document.createTextNode("Fornavn");
-			var etternavn = document.createTextNode("Etternavn");
-			var adresse = document.createTextNode("Adresse");
-			var telefonnr = document.createTextNode("Telefon");
+        let newCell0 = document.createElement("th");
+        let newCell1 = document.createElement("th");
+        let newCell2 = document.createElement("th");
+        let newCell3 = document.createElement("th");
 
-			nyCelle0.appendChild(fornavn);
-			nyCelle1.appendChild(etternavn);
-			nyCelle2.appendChild(adresse);
-			nyCelle3.appendChild(telefonnr);
+        tableRow.appendChild(newCell0);
+        tableRow.appendChild(newCell1);
+        tableRow.appendChild(newCell2);
+        tableRow.appendChild(newCell3);
 
-			this.tabell.appendChild(tableRow);
+        let firstName = document.createTextNode("Firstname");
+        let lastName = document.createTextNode("Lastname");
+        let address = document.createTextNode("Address");
+        let phonenr = document.createTextNode("Phone");
 
-			var addbtn = document.getElementById("Add member");
-			document.getElementsByTagName("body")[0].insertBefore(this.table, addbtn);
-		 
-		 
-		 
-	 }
-	 
-	 
-	 
-	 updateTabel(memberdata){
-		 
-		 
-		 
-		 if (memberdata.constructor !== Array) {
-				memberdata = [ memberdata ];
-			}
-			for (var i = 0; i < memberdata.length; i++) {
-				var tabellRekke = document.createElement("tr");
-				tabellRekke.setAttribute("id", memberdata[i].memberId);
-				var nyCelle0 = document.createElement("td");
-				var nyCelle1 = document.createElement("td");
-				var nyCelle2 = document.createElement("td");
-				var nyCelle3 = document.createElement("td");
-				var nyCelle4 = document.createElement("td");
-				var nyCelle5 = document.createElement("td");
-				var nyCelle6 = document.createElement("td");
-				nyCelle6.setAttribute("style", "visibility:hidden;");
+        newCell0.appendChild(firstName);
+        newCell1.appendChild(lastName);
+        newCell2.appendChild(address);
+        newCell3.appendChild(phonenr);
 
-				tabellRekke.appendChild(nyCelle0);
-				tabellRekke.appendChild(nyCelle1);
-				tabellRekke.appendChild(nyCelle2);
-				tabellRekke.appendChild(nyCelle3);
-				tabellRekke.appendChild(nyCelle4);
-				tabellRekke.appendChild(nyCelle5);
-				tabellRekke.appendChild(nyCelle6);
+        this.table.appendChild(tableRow);
 
-				var fornavn = document.createTextNode(memberdata[i].firstname);
-				var etternavn = document.createTextNode(memberdata[i].lastname);
-				var adresse = document.createTextNode(memberdata[i].address);
-				var telefonnr = document.createTextNode(memberdata[i].phone);
-				var slettKnapp = document.createElement("input");
-				slettKnapp.setAttribute("type", "button");
-				slettKnapp.setAttribute("value", "slett");
-				slettKnapp.addEventListener('click', function() {
-					ctrler.deleteMemberClick(this.parentNode.parentNode.id);
-				});
+        var addMemberBtn = document.getElementById("addMemberBtn");
+        document.getElementsByTagName("body")[0].insertBefore(this.table, addMemberBtn);
 
-				var endreKnapp = document.createElement("input");
-				endreKnapp.setAttribute("type", "button");
-				endreKnapp.setAttribute("value", "endre");
-				endreKnapp.addEventListener('click', function() {
-					ctrler.changeMemberClick(this.parentNode.parentNode.id);
-				});
+    }
 
-				var medlemID = document.createTextNode(memberdata[i].memberId);
 
-				nyCelle0.appendChild(fornavn);
-				nyCelle1.appendChild(etternavn);
-				nyCelle2.appendChild(adresse);
-				nyCelle3.appendChild(telefonnr);
-				nyCelle4.appendChild(slettKnapp);
-				nyCelle5.appendChild(endreKnapp);
-				nyCelle6.appendChild(medlemID);
+    refreshTable(memberdata) {
+        if (memberdata.constructor !== Array) {
+            memberdata = [memberdata];
+        }
+        for (let i = 0; i < memberdata.length; i++) {
+            let tableRow = document.createElement("tr");
+            tableRow.setAttribute("id", memberdata[i].memberId);
+            let newCell0 = document.createElement("td");
+            let newCell1 = document.createElement("td");
+            let newCell2 = document.createElement("td");
+            let newCell3 = document.createElement("td");
+            let newCell4 = document.createElement("td");
+            let newCell5 = document.createElement("td");
+            let newCell6 = document.createElement("td");
+            newCell6.setAttribute("style", "visibility:hidden;");
 
-				document.getElementsByTagName("table")[0].appendChild(tabellRekke);
-		 
-		 
-		 
-	 }
-	 
-	 }
-	 
-	deleteMember() {
-		
-	} 
-	
-	getMemberID() {
-		
-	}
-	 
-	 
-	
+            tableRow.appendChild(newCell0);
+            tableRow.appendChild(newCell1);
+            tableRow.appendChild(newCell2);
+            tableRow.appendChild(newCell3);
+            tableRow.appendChild(newCell4);
+            tableRow.appendChild(newCell5);
+            tableRow.appendChild(newCell6);
+
+            let firstName = document.createTextNode(memberdata[i].firstname);
+            let lastName = document.createTextNode(memberdata[i].lastname);
+            let address = document.createTextNode(memberdata[i].address);
+            let phoneNr = document.createTextNode(memberdata[i].phone);
+            let delBtn = document.createElement("input");
+            delBtn.setAttribute("type", "button");
+            delBtn.setAttribute("value", "Delete");
+            delBtn.addEventListener('click', function () {
+                ctrl.removeMemberClickBtn(this.parentNode.parentNode.id);
+            });
+
+            let editBtn = document.createElement("input");
+            editBtn.setAttribute("type", "button");
+            editBtn.setAttribute("value", "Edit");
+            editBtn.addEventListener('click', function () {
+                ctrl.changeMemberClick(this.parentNode.parentNode.id);                              // point to incorrect method
+            });
+
+            let memberID = document.createTextNode(memberdata[i].memberId);
+
+            newCell0.appendChild(firstName);
+            newCell1.appendChild(lastName);
+            newCell2.appendChild(address);
+            newCell3.appendChild(phoneNr);
+            newCell4.appendChild(delBtn);
+            newCell5.appendChild(editBtn);
+            newCell6.appendChild(memberID);
+
+            document.getElementsByTagName("table")[0].appendChild(tableRow);
+        }
+    }
+
+
+    deleteMember(memberIdArray) {
+        if (memberIdArray.constructor !== Array) {
+            memberIdArray = [memberIdArray];
+        }
+
+        for (let i = 0; i < memberIdArray.length; i++) {
+            let row = document.getElementById(memberIdArray[i]);
+            this.table.removeChild(row);
+        }
+    }
+
+
+    updatedMember(memberArray) {
+        if (memberArray.constructor !== Array) {
+            memberArray = [ memberArray ];
+        }
+        for (let i = 0; i < memberArray.length; i++) {
+            let row = document.getElementById(memberArray[i].memberId);
+            row.cells[0].firstChild.data = memberArray[i].firstname;
+            row.cells[1].firstChild.data = memberArray[i].lastname;
+            row.cells[2].firstChild.data = memberArray[i].address;
+            row.cells[3].firstChild.data = memberArray[i].phone;
+        }
+    }
+
+    getMemberFields() {
+        let row = document.getElementById(memberId);
+        let firstname = row.cells[0].firstChild.data;
+        let lastname = row.cells[1].firstChild.data;
+        let address = row.cells[2].firstChild.data;
+        let phone = row.cells[3].firstChild.data;
+        return {
+            "firstname" : firstname,
+            "lastname" : lastname,
+            "address" : address,
+            "phone" : phone
+        }
+    }
+
+
+
 } // uiHandler
