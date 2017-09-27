@@ -1,14 +1,12 @@
 class MainController {
     constructor() {
         this.logId = -1;
-     //   this.table = document.getElementById("table");
         this.ui = new UIHandler();
-
-        //	document.getElementById("addMember").forEach((element) => {element.addEventListener("click",this.addMember.bind(this),false)})
     }
 
+    // start the application
     init() {
-        this.ui.initTable();
+        this.ui.initializeTable();
         this.checkUpdates();
         window.setTimeout(this.checkUpdates.bind(this), 4000);
     }
@@ -21,9 +19,8 @@ class MainController {
 
     }
 
-
     manageUpdates(jsontext) {
-        let statusElm=document.getElementById("answer")
+        let statusElm = document.getElementById("answer")
         const response = JSON.parse(jsontext).updates
         if (!response.status) alert('error!');
 
@@ -39,12 +36,12 @@ class MainController {
             if (response.updatedMembers) {
                 let updatedMembers = response.updatedMembers;
                 this.ui.updatedMember(updatedMembers);
-                statusElm.innerHTML ="Table was updated";
+                statusElm.innerHTML = "Table was updated";
             }
 
             if (response.newMembers) {
                 let newMembers = response.newMembers;
-                statusElm.innerHTML ="Got new members";
+                statusElm.innerHTML = "Got new member(s)";
                 this.ui.refreshTable(newMembers);
             }
 
@@ -53,25 +50,38 @@ class MainController {
     }
 
 
-
-    openMemberdialog() {
-       let openDilog = window.open("memberUpdate.html", "dialog");
+// Show new member row , fires when user click addMember btn
+    addMemberdialog() {
+        this.ui.editMemberModus(0);
     }
 
+    // fires when user click submit btn
+    sendMemberData(memberID) {
+        let url = config.servicesPath + "/member";
+        let ajax = new AJAXConnection(url);
+        ajax.onsuccess = this.manageUpdates;
+        let memberData = this.ui.getnewMemberData(memberID);                     // WHYS yells getMemberData() undefined ?
+        ajax.post(null, {'member': memberData})
+        this.ui.canceladdMemberMode.bind(table)
+    }
 
     removeMemberClickBtn(memberId) {
-        let url =config.servicesPath + "/member";
+        let url = config.servicesPath + "/member";
         let ajax = new AJAXConnection(url);
         ajax.onsuccess = this.removeMemberCallback.bind(this);
-        ajax.del([ memberId ]);
+        ajax.del([memberId]);
 
     }
 
 
-removeMemberCallback(msg) {
+    removeMemberCallback(msg) {
         let responseText = JSON.parse(msg);
-        if(responseText.updatedMember.status) { this.checkUpdates()}
-}
+        if (responseText.updatedMember.status) {
+            this.checkUpdates()
+        }
+    }
 
-
+    editMemberModus(editmode, memberID) {
+        this.ui.editMemberModus(editmode, memberID);
+    }
 } // class
