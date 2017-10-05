@@ -43,7 +43,7 @@ class AJAXConnection {
     let xmlhttprequest = new XMLHttpRequest()
 
     // If given, add path to the URL.
-    let url = this._url + this._convertToPath(pathArray)
+    let url = this._url + this._convertToPath(pathArray)    // url = .../data/member/mID
     
     xmlhttprequest.open('PUT', url, true);
 
@@ -84,6 +84,7 @@ class AJAXConnection {
         if (this.onerror) this.onerror(xmlhttprequest)
       }
     } catch(e) {
+      console.log(e);
       if (this.onerror) this.onerror()
     }
   }

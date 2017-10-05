@@ -5,6 +5,7 @@ class UIHandler {
 
     initializeTable() {
         this.table = document.createElement("table");
+        //  this.table.setAttribute('border', '0');
 
         let tableRow = document.createElement("tr");
 
@@ -30,16 +31,21 @@ class UIHandler {
 
         this.table.appendChild(tableRow);
 
-        var addMemberBtn = document.getElementById("addMemberBtn");
+        let addMemberBtn = document.getElementById("addMemberBtn");
         document.getElementsByTagName("body")[0].insertBefore(this.table, addMemberBtn);
-
     }
 
 
-    refreshTable(memberdata) {
+    refreshTable(memberdata,n) {
         if (memberdata.constructor !== Array) {
             memberdata = [memberdata];
         }
+
+        if(n ===0){
+
+            this.table.deleteRow(this.table.rows.length-1);
+        }
+
         for (let i = 0; i < memberdata.length; i++) {
             let tableRow = document.createElement("tr");
             tableRow.setAttribute("id", memberdata[i].memberId);
@@ -105,42 +111,28 @@ class UIHandler {
     }
 
 
-    updatedMember(memberArray) {
-        if (memberArray.constructor !== Array) {
-            memberArray = [memberArray];
-        }
-        for (let i = 0; i < memberArray.length; i++) {
-            let row = document.getElementById(memberArray[i].memberId);
-            row.cells[0].firstChild.data = memberArray[i].firstname;
-            row.cells[1].firstChild.data = memberArray[i].lastname;
-            row.cells[2].firstChild.data = memberArray[i].address;
-            row.cells[3].firstChild.data = memberArray[i].phone;
-        }
-    }
+    updatedMember(member) {
+        let inputRowNr = document.getElementById(member.memberId);
+        const cells = inputRowNr.getElementsByTagName("td")
+        cells[0].textContent = member.firstname
+        cells[1].textContent = member.lastname
+        cells[2].textContent = member.address
+        cells[3].textContent = member.phone
 
-    getMemberFields() {
-        let row = document.getElementById(memberId);
-        let firstname = row.cells[0].firstChild.data;
-        let lastname = row.cells[1].firstChild.data;
-        let address = row.cells[2].firstChild.data;
-        let phone = row.cells[3].firstChild.data;
-        return {
-            "firstname": firstname,
-            "lastname": lastname,
-            "address": address,
-            "phone": phone
-        }
-    }
+        cells[4].innerHTML = '<button type="button" id="' + member.memberId + '"  onclick=" ctrl.removeMemberClickBtn(this.parentNode.parentNode.id) " >Delete</button>';
+        cells[5].innerHTML = '<button type="button" id="' + member.memberId + '"  onclick=" ctrl.editMemberModus(1, this.parentNode.parentNode.id) " >Edit</button>';
+
+        document.getElementById("addMemberBtn").disabled = false;
+    } // updateMember
 
 
     editMemberModus(editmode, memberID) {
         document.getElementById("addMemberBtn").disabled = true;        // disable addMember Btn
         //row = (memberID);
 
-// Edit a existing member
+// Edit existing member
         if (editmode != 0) {
             let row = document.getElementById(memberID);
-            row.id = "inputRow";
 
             let firstname = row.cells[0].innerHTML;
             let lastname = row.cells[1].innerHTML;
@@ -151,7 +143,7 @@ class UIHandler {
             this.table.deleteRow(rowNr);
 
             row = this.table.insertRow(rowNr);
-            row.id = "EditRow";
+            row.id = memberID;
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);
             let cell3 = row.insertCell(2);
@@ -163,13 +155,11 @@ class UIHandler {
             cell3.innerHTML = '<input type="text" size="4" value="' + address + '"/>';
             cell4.innerHTML = '<input type="text" size="4" value="' + phone + '"/>';
 
-
-            cell5.innerHTML = '<button type="button" id="' + memberID + '">Send</button>';
-            document.getElementById(memberID).addEventListener("click", ctrl.sendMemberData(memberID), false);
+            cell5.innerHTML = '<button type="button" id="' + memberID + '"  onclick=" ctrl.sendEditMember(' + memberID + ') " >Send</button>';
+            cell6.innerHTML = '<button type="button" id="cancel"   onclick="ctrl.canceladdMemberMode(' + memberID + ')">Cancel</button>';
         } else {            //  Or add new member
 
             let row = this.table.insertRow(this.table.rows.length);
-            row.id = "inputRow";
 
             let cell1 = row.insertCell(0);
             let cell2 = row.insertCell(1);
@@ -183,36 +173,80 @@ class UIHandler {
             cell3.innerHTML = '<input type="text" size="5" />';
             cell4.innerHTML = '<input type="text" size="5" />';
 
-            cell5.innerHTML = '<button type="button"  id="submit" >Send</button>';
-            cell6.innerHTML = '<button type="button" id="cancel" >Cancel</button>';
-
-
-            let sendBtn = document.getElementById(memberID);
-            sendBtn.addEventListener('click', function () {
-                this.sendMemberData.bind(memberID);
-            });
-
+            cell5.innerHTML = '<button type="button" id="' + memberID + '"  onclick=" ctrl.sendNewMember() " >Send</button>';
+            cell6.innerHTML = '<button type="button" id="cancel"   onclick="this.canceladdMemberMode('+ memberID +')">Cancel</button>';
 
         }
 
     }
-    canceladdMemberMode() {
-        let inputRowNr = document.getElementById("inputRow").rowIndex;
-        this.deleteRow(inputRowNr);
-        document.getElementById("addMemberBtn").disabled = false;
-    }
 
-    // used by submitdata btn
-    getnewMemberData(memberId) {
+    canceladdMemberMode(memberId) {
         let row = document.getElementById(memberId);
+        let rowNr = row.rowIndex;
+        const cells = row.getElementsByTagName("td")
+        cells[0].textContent = row.cells[0].getElementsByTagName('input')[0].value
+        cells[1].textContent = row.cells[1].getElementsByTagName('input')[0].value
+        cells[2].textContent = row.cells[2].getElementsByTagName('input')[0].value
+        cells[3].textContent = row.cells[3].getElementsByTagName('input')[0].value
 
-        const member = {
-            'firstname': row.cells[0].firstChild.data,      // Cannot read property '0' of undefined (row) why, lost context?
-            'lastname': row.cells[1].firstChild.data,
-            'address': row.cells[2].firstChild.data,
-            'phone': row.cells[3].firstChild.data
+        cells[4].innerHTML = '<button type="button" id="' + memberId + '"  onclick=" ctrl.removeMemberClickBtn(this.parentNode.parentNode.id) " >Delete</button>';
+        cells[5].innerHTML = '<button type="button" id="' + memberId + '"  onclick=" ctrl.editMemberModus(1, this.parentNode.parentNode.id) " >Edit</button>';
+
+        document.getElementById("addMemberBtn").disabled = false
+    }
+
+    changeMemberCallback(memberID) {
+        let row = document.getElementById(memberID);
+
+        let firstname = row.cells[0].innerHTML;
+        let lastname = row.cells[1].innerHTML;
+        let address = row.cells[2].innerHTML;
+        let phone = row.cells[3].innerHTML;
+
+        let rowNr = row.rowIndex;
+        this.table.deleteRow(rowNr);
+
+        row = this.table.insertRow(rowNr);
+        row.id = rowNr;
+
+        let cell1 = row.insertCell(0);
+        let cell2 = row.insertCell(1);
+        let cell3 = row.insertCell(2);
+        let cell4 = row.insertCell(3);
+        let cell5 = row.insertCell(4);
+        let cell6 = row.insertCell(5);
+        cell1.innerHTML = '<tr> "<td>" ' + firstname + '"</td>"  </tr>';
+        cell2.innerHTML = '<tr> <td> ' + lastname + '</td>  </tr>';
+        cell3.innerHTML = '<tr> <td> ' + address + '</td>  </tr>';
+        cell4.innerHTML = '<tr> <td> ' + phone + '</td>  </tr>';
+
+        cell5.innerHTML = '<button type="button" id="' + memberID + '"  onclick=" ctrl.removeMemberClickBtn(this.parentNode.parentNode.id) " >Delete</button>';
+        cell6.innerHTML = '<button type="button" id="' + memberID + '"  onclick=" ctrl.editMemberModus(1, this.parentNode.parentNode.id) " >Edit</button>';
+
+    } // changeMemberCallback
+
+    // used by submitdata()
+    getnewMemberData(memberId) {
+
+        if(memberId !=0) {
+            let row = document.getElementById(memberId);
+            const member = {
+                'firstname': row.cells[0].getElementsByTagName('input')[0].value,
+                'lastname': row.cells[1].getElementsByTagName('input')[0].value,
+                'address': row.cells[2].getElementsByTagName('input')[0].value,
+                'phone': row.cells[3].getElementsByTagName('input')[0].value
+            }
+            return member;
+        }else {  // get input values
+            const member = {
+                'firstname': this.table.rows[this.table.rows.length-1].cells[0].getElementsByTagName('input')[0].value,
+                'lastname': this.table.rows[this.table.rows.length-1].cells[1].getElementsByTagName('input')[0].value,
+                'address': this.table.rows[this.table.rows.length-1].cells[2].getElementsByTagName('input')[0].value,
+                'phone': this.table.rows[this.table.rows.length-1].cells[3].getElementsByTagName('input')[0].value
+            }
+            return member;
         }
-        return member;
+
     }
 
 } // uiHandler
