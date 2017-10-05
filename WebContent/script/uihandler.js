@@ -174,13 +174,16 @@ class UIHandler {
             cell4.innerHTML = '<input type="text" size="5" />';
 
             cell5.innerHTML = '<button type="button" id="' + memberID + '"  onclick=" ctrl.sendNewMember() " >Send</button>';
-            cell6.innerHTML = '<button type="button" id="cancel"   onclick="this.canceladdMemberMode('+ memberID +')">Cancel</button>';
+            cell6.innerHTML = '<button type="button" id="cancel"   onclick="ctrl.canceladdMemberMode('+ memberID +',0)">Cancel</button>';
 
         }
 
     }
 
-    canceladdMemberMode(memberId) {
+    canceladdMemberMode(memberId, n) {
+
+        if(n != 0){
+
         let row = document.getElementById(memberId);
         let rowNr = row.rowIndex;
         const cells = row.getElementsByTagName("td")
@@ -193,6 +196,11 @@ class UIHandler {
         cells[5].innerHTML = '<button type="button" id="' + memberId + '"  onclick=" ctrl.editMemberModus(1, this.parentNode.parentNode.id) " >Edit</button>';
 
         document.getElementById("addMemberBtn").disabled = false
+        }else {
+            let row = this.table.rows.length-1;
+            this.table.deleteRow(row);
+            document.getElementById("addMemberBtn").disabled = false
+        }
     }
 
     changeMemberCallback(memberID) {
@@ -224,6 +232,12 @@ class UIHandler {
         cell6.innerHTML = '<button type="button" id="' + memberID + '"  onclick=" ctrl.editMemberModus(1, this.parentNode.parentNode.id) " >Edit</button>';
 
     } // changeMemberCallback
+
+
+    enableAddBtn() {
+        document.getElementById("addMemberBtn").disabled = false
+    }
+
 
     // used by submitdata()
     getnewMemberData(memberId) {

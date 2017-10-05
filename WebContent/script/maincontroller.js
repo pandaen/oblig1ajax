@@ -100,6 +100,7 @@ class MainController {
         } else {
             statusElm.innerHTML = "The new member was added successfully";
             this.checkUpdates(0)
+            this.ui.enableAddBtn();
         }
     }
 
@@ -127,7 +128,7 @@ class MainController {
             ajax.onsuccess = this.manageNewMember.bind(this);
             let memberData = this.ui.getnewMemberData(0);
             ajax.post(null, {'member': memberData})
-            this.ui.canceladdMemberMode.bind(this.ui.table)
+            this.ui.canceladdMemberMode.bind()
         }
 
         removeMemberClickBtn(memberId){
@@ -150,9 +151,8 @@ class MainController {
             this.ui.editMemberModus(editmode, memberID);
         }
 
-    canceladdMemberMode(MId) {
-            console.log("cancel clicked!");
-            this.ui.canceladdMemberMode(MId);
+    canceladdMemberMode(MId,n) {
+            this.ui.canceladdMemberMode(MId,n);
     }
 
 
